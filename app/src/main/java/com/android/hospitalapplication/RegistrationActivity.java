@@ -130,20 +130,31 @@ public class RegistrationActivity extends AppCompatActivity {
 
                     }
                     if (patient.isChecked()) {
-                        blood_group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                bloodGroup = adapterView.getItemAtPosition(i).toString().trim();
-                                createAccount(name, email, password, phone, address, gender, bloodGroup);
-                            }
-                        });
+                       blood_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                           @Override
+                           public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                               bloodGroup = adapterView.getItemAtPosition(i).toString().trim();
+                               createAccount(name, email, password, phone, address, gender, bloodGroup);
+                           }
+
+                           @Override
+                           public void onNothingSelected(AdapterView<?> adapterView) {
+
+                           }
+                       });
                     } else if (doctor.isChecked()) {
-                        speciality.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                specialisation = adapterView.getItemAtPosition(i).toString().trim();
-                            }
-                        });
+                     speciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                         @Override
+                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                             specialisation = adapterView.getItemAtPosition(i).toString().trim();
+
+                         }
+
+                         @Override
+                         public void onNothingSelected(AdapterView<?> adapterView) {
+
+                         }
+                     });
                         registrationId = regId.getText().toString().trim();
                         if (!registrationId.startsWith("DOC")) {
                             regId.setError("PLease Enter a Valid Registration Id");
