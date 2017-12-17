@@ -94,77 +94,47 @@ public class RegistrationActivity extends AppCompatActivity {
                     address = add.getText().toString().trim();
                     confirmPassword = confirmPass.getText().toString().trim();
 
-                    if (!emailIsValid(email)) {
-                        e_mail.setError("Invalid E-Mail");
-                    } else if (name.isEmpty()) {
-                        name_user.setError("Invalid Name");
-                    } else if (phone.isEmpty()) {
-                        contact.setError("Invalid Contact No.");
-                    } else if (address.isEmpty()) {
-                        add.setError("Invalid Address");
-                    } else if (!passIsValid(password)) {
-                        Log.d("password", password);
-                        pass.setError("Password should have minimum 4 characters");
-                    } else if (!(confirmPassword.equals(password))) {
-                        confirmPass.setError("Passwords Do Not Match");
-                        confirmPass.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                String confirmpass = confirmPass.getText().toString().trim();
-                                Log.d("pass", password + "\n" + confirmpass);
-                                if (!(confirmpass.equals(password))) {
-                                    confirmPass.setError("Passwords Do Not Match");
+                    if (validateDetails(name, email, password, confirmPassword, address, phone)) {
+                       if (genderButtons.getCheckedRadioButtonId() < 0) {
+                            Toast.makeText(RegistrationActivity.this, "Please Select A Gender", Toast.LENGTH_SHORT).show();
+                        } else if (patient.isChecked()) {
+                            blood_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    bloodGroup = adapterView.getItemAtPosition(i).toString().trim();
                                 }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            createAccount(name, email, password, phone, address, gender, bloodGroup);
+                        } else if (doctor.isChecked()) {
+                            speciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                    specialisation = adapterView.getItemAtPosition(i).toString().trim();
+
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            registrationId = regId.getText().toString().trim();
+                            if (!registrationId.startsWith("DOC")) {
+                                regId.setError("PLease Enter a Valid Registration Id");
+                            } else {
+                                createAccount(name, email, password, phone, address, gender, specialisation, registrationId);
                             }
-                        });
-                    } else if (genderButtons.getCheckedRadioButtonId() == -1) {
-                        Toast.makeText(RegistrationActivity.this, "Please Select A Gender", Toast.LENGTH_SHORT).show();
-                    }
-                    if (patient.isChecked()) {
-                       blood_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                           @Override
-                           public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                               bloodGroup = adapterView.getItemAtPosition(i).toString().trim();
-                           }
-
-                           @Override
-                           public void onNothingSelected(AdapterView<?> adapterView) {
-
-                           }
-                       });
-                        createAccount(name, email, password, phone, address, gender, bloodGroup);
-
-                    } else if (doctor.isChecked()) {
-                     speciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                         @Override
-                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                             specialisation = adapterView.getItemAtPosition(i).toString().trim();
-
-                         }
-
-                         @Override
-                         public void onNothingSelected(AdapterView<?> adapterView) {
-
-                         }
-                     });
-                        registrationId = regId.getText().toString().trim();
-                     //   if (!registrationId.startsWith("DOC")) {
-                      //      regId.setError("PLease Enter a Valid Registration Id");
-                       // } else {
-                            createAccount(name, email, password, phone, address, gender, specialisation, registrationId);
-                       // }
+                        }
                     }
                 }
             }
         });
+
 
     }
 
@@ -244,7 +214,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 loading.dismiss();
-                                Toast.makeText(RegistrationActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegistrationActivity.this, "Account Successfully Created", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
                                 finish();
                             }
@@ -276,14 +246,14 @@ public class RegistrationActivity extends AppCompatActivity {
                     userDetails.put("address", address);
                     userDetails.put("gender", gender);
                     userDetails.put("speciality", speciality);
-                    userDetails.put("registration_id", regId);
+                    userDetails.put("doctor_reg_id", regId);
                     userDetails.put("type", "Doctor");
                     dbref.setValue(userDetails).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 loading.dismiss();
-                                Toast.makeText(RegistrationActivity.this, "Signed In Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegistrationActivity.this, "Account Successfully Created", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
                                 finish();
                             }
@@ -309,4 +279,63 @@ public class RegistrationActivity extends AppCompatActivity {
         if (pass.length() > 4) return true;
         else return false;
     }
+
+    public boolean validateDetails(String name, String email, final String password, String confirmPassword, String address, String phone) {
+
+        boolean check = true;
+
+        if (check) {
+            if (!emailIsValid(email)) {
+                e_mail.setError("Invalid e-Mail");
+                check = false;
+            }
+            if (name.isEmpty()) {
+                name_user.setError("Name Cannot Be Empty");
+                check = false;
+            }
+            if (phone.isEmpty() || !(phone.length() == 10)) {
+                contact.setError("Invalid Contact No.(length should be 10)");
+                check = false;
+            }
+            if (address.isEmpty()) {
+                add.setError("Address Cannot Be Empty");
+                check = false;
+            }
+            if (!passIsValid(password)) {
+                Log.d("password", password);
+                pass.setError("Password should have minimum 4 characters");
+                check = false;
+            }
+            if (!(confirmPassword.equals(password))) {
+                confirmPass.setError("Passwords Do Not Match");
+                confirmPass.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String confirmpass = confirmPass.getText().toString().trim();
+                        Log.d("pass", password + "\n" + confirmpass);
+                        if (!(confirmpass.equals(password))) {
+                            confirmPass.setError("Passwords Do Not Match");
+                        }
+                    }
+                });
+                check = false;
+            }
+            if (genderButtons.getCheckedRadioButtonId() < 0) {
+                Toast.makeText(RegistrationActivity.this, "Please Select A Gender", Toast.LENGTH_LONG).show();
+                check = false;
+            }
+        } else {
+            check = true;
+        }
+        return  check;
+    }
+
 }

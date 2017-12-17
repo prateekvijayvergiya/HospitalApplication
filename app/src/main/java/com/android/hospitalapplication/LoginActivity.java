@@ -227,7 +227,7 @@ public class LoginActivity extends AppCompatActivity  {
         private final String mEmail;
         private final String mPassword;
         private FirebaseAuth auth = FirebaseAuth.getInstance();
-        private DatabaseReference dbrefUser= FirebaseDatabase.getInstance().getReference().child("Users");
+        private DatabaseReference dbrefUser= FirebaseDatabase.getInstance().getReference("Users");
 
 
         UserLoginTask(String email, String password) {
@@ -248,15 +248,17 @@ public class LoginActivity extends AppCompatActivity  {
                         if(task.isSuccessful()){
                             FirebaseUser user = auth.getCurrentUser();
                             String uid = user.getUid();
-                            dbrefUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                            dbrefUser.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    String type= dataSnapshot.child("type").getValue().toString().trim();
+                                    String type = dataSnapshot.child("type").getValue().toString().trim();
                                     if(type.equals("Doctor")){
                                         startActivity(new Intent(LoginActivity.this,DoctorActivity.class));
+                                        finish();
                                     }
                                     else if(type.equals("Patient")){
                                         startActivity(new Intent(LoginActivity.this,PatientActivity.class));
+                                        finish();
                                     }
                                 }
 
@@ -266,6 +268,10 @@ public class LoginActivity extends AppCompatActivity  {
                                 }
                             });
                             Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this,"Login Failed ! Wrong Credentials",Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });

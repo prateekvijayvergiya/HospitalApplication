@@ -52,7 +52,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/buttons">
+        android:layout_below="@+id/buttons"
+        android:layout_above="@id/register_button">
 
         <LinearLayout
             android:id="@+id/gen_details"
@@ -236,7 +237,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Registration ID "
-                        android:textAllCaps="true"
+                        android:inputType="textCapCharacters"
                         android:textColorHint="@color/md_black_1000" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -271,16 +272,17 @@
                     android:textColorHint="@color/md_black_1000" />
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/md_deep_orange_500"
-                android:text="Register"
-                android:textColor="@color/md_white_1000"
-                android:id="@+id/register_button"/>
+
         </LinearLayout>
 
     </ScrollView>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/md_deep_orange_500"
+        android:text="Register"
+        android:textColor="@color/md_white_1000"
+        android:id="@+id/register_button"/>
 </RelativeLayout>
