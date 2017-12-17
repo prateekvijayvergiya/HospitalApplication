@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                                 finish();
                             }
                             else if(type.equals("Patient")){
-                                startActivity(new Intent(SplashActivity.this,DoctorActivity.class));
+                                startActivity(new Intent(SplashActivity.this,PatientActivity.class));
                                 finish();
 
                             }

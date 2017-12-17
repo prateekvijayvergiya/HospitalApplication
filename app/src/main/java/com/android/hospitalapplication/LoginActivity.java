@@ -35,6 +35,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -221,6 +227,8 @@ public class LoginActivity extends AppCompatActivity  {
         private final String mEmail;
         private final String mPassword;
         private FirebaseAuth auth = FirebaseAuth.getInstance();
+        private DatabaseReference dbrefUser= FirebaseDatabase.getInstance().getReference().child("Users");
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -238,6 +246,25 @@ public class LoginActivity extends AppCompatActivity  {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            FirebaseUser user = auth.getCurrentUser();
+                            String uid = user.getUid();
+                            dbrefUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String type= dataSnapshot.child("type").getValue().toString().trim();
+                                    if(type.equals("Doctor")){
+                                        startActivity(new Intent(LoginActivity.this,DoctorActivity.class));
+                                    }
+                                    else if(type.equals("Patient")){
+                                        startActivity(new Intent(LoginActivity.this,PatientActivity.class));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                             Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -103,7 +103,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     } else if (address.isEmpty()) {
                         add.setError("Invalid Address");
                     } else if (!passIsValid(password)) {
-                        Log.d("e", password);
+                        Log.d("password", password);
                         pass.setError("Password should have minimum 4 characters");
                     } else if (!(confirmPassword.equals(password))) {
                         confirmPass.setError("Passwords Do Not Match");
@@ -127,14 +127,12 @@ public class RegistrationActivity extends AppCompatActivity {
                         });
                     } else if (genderButtons.getCheckedRadioButtonId() == -1) {
                         Toast.makeText(RegistrationActivity.this, "Please Select A Gender", Toast.LENGTH_SHORT).show();
-
                     }
                     if (patient.isChecked()) {
                        blood_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                            @Override
                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                                bloodGroup = adapterView.getItemAtPosition(i).toString().trim();
-                               createAccount(name, email, password, phone, address, gender, bloodGroup);
                            }
 
                            @Override
@@ -142,6 +140,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
                            }
                        });
+                        createAccount(name, email, password, phone, address, gender, bloodGroup);
+
                     } else if (doctor.isChecked()) {
                      speciality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                          @Override
@@ -156,15 +156,13 @@ public class RegistrationActivity extends AppCompatActivity {
                          }
                      });
                         registrationId = regId.getText().toString().trim();
-                        if (!registrationId.startsWith("DOC")) {
-                            regId.setError("PLease Enter a Valid Registration Id");
-                        } else {
+                     //   if (!registrationId.startsWith("DOC")) {
+                      //      regId.setError("PLease Enter a Valid Registration Id");
+                       // } else {
                             createAccount(name, email, password, phone, address, gender, specialisation, registrationId);
-                        }
+                       // }
                     }
                 }
-
-
             }
         });
 
@@ -311,6 +309,4 @@ public class RegistrationActivity extends AppCompatActivity {
         if (pass.length() > 4) return true;
         else return false;
     }
-
-
 }

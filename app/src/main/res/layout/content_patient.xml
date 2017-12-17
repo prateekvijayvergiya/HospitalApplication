@@ -8,4 +8,16 @@
     tools:context="com.android.hospitalapplication.PatientActivity"
     tools:showIn="@layout/activity_patient">
 
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="72dp"
+        android:text="THIS IS PATIENT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="4dp" />
+
 </android.support.constraint.ConstraintLayout>
