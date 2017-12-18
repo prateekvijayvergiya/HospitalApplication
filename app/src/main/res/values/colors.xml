@@ -3,10 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorBack">#47f9e8e8</color>
 
 
 
-        <!--reds-->
+
+    <!--reds-->
         <color name="md_red_50">#FFEBEE</color>
         <color name="md_red_100">#FFCDD2</color>
         <color name="md_red_200">#EF9A9A</color>

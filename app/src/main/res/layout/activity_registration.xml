@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#47f9e8e8"
+
     tools:context="com.android.hospitalapplication.RegistrationActivity">
 
     <include
@@ -19,9 +21,9 @@
         android:layout_below="@+id/register_app_bar_layout"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="25dp"
         android:text="Register As :"
-        android:textSize="16sp" />
+        android:textSize="19sp" />
 
     //Doc/Patient Button
     <RadioGroup
@@ -55,13 +57,18 @@
         android:layout_below="@+id/buttons"
         android:layout_above="@id/register_button">
 
+
+
         <LinearLayout
             android:id="@+id/gen_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/buttons"
+            android:padding="10dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:background="@drawable/rounded_corner_button"
+            >
 
             //Name
             <android.support.design.widget.TextInputLayout
@@ -149,25 +156,26 @@
                     android:textSize="16sp"
                     android:textColor="@color/md_black_1000"
                     android:text="Gender :"/>
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/gender_buttons">
-                <RadioButton
-                    android:id="@+id/gender_male"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Male"
-                    android:onClick="isSelected"/>
-                <RadioButton
-                    android:id="@+id/gender_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Female"
-                    android:onClick="isSelected"/>
-            </RadioGroup>
+                    android:orientation="horizontal"
+                    android:id="@+id/gender_buttons">
+                    <RadioButton
+                        android:id="@+id/gender_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male"
+                        android:onClick="isSelected"/>
+                    <RadioButton
+                        android:id="@+id/gender_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Female"
+                        android:onClick="isSelected"/>
+                </RadioGroup>
             </LinearLayout>
+
 
             //patient specific details
             <LinearLayout
@@ -191,10 +199,13 @@
                 <Spinner
                     android:id="@+id/blood_group"
                     android:layout_width="wrap_content"
-                    android:background="@color/md_grey_400"
+                    android:background="@color/md_deep_orange_500"
                     android:layout_height="match_parent"
                     android:spinnerMode="dropdown"
-                    android:layout_marginLeft="20dp"></Spinner>
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp">
+                </Spinner>
             </LinearLayout>
 
             //Doctor Specific Details
@@ -223,8 +234,10 @@
                     <Spinner
                         android:id="@+id/doctor_speciality"
                         android:layout_width="wrap_content"
-                        android:background="@color/md_grey_400"
+                        android:background="@color/md_deep_orange_500"
                         android:layout_height="match_parent"
+                        android:textAlignment="center"
+                        android:gravity="center"
                         android:spinnerMode="dialog"
                         android:layout_marginLeft="20dp"></Spinner>
                 </LinearLayout>
