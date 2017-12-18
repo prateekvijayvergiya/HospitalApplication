@@ -57,8 +57,6 @@
         android:layout_below="@+id/buttons"
         android:layout_above="@id/register_button">
 
-
-
         <LinearLayout
             android:id="@+id/gen_details"
             android:layout_width="match_parent"

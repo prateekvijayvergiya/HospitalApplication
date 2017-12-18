@@ -54,11 +54,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity  {
 
-
-
-
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -75,9 +70,9 @@ public class LoginActivity extends AppCompatActivity  {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView =  findViewById(R.id.email);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -89,8 +84,7 @@ public class LoginActivity extends AppCompatActivity  {
             }
         });
 
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton =  findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +94,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        registerLink =(TextView) findViewById(R.id.register);
+        registerLink = findViewById(R.id.register);
 
         registerLink.setOnClickListener(new OnClickListener() {
             @Override
@@ -118,11 +112,10 @@ public class LoginActivity extends AppCompatActivity  {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+         final FirebaseAuth auth = FirebaseAuth.getInstance();
+         final DatabaseReference dbrefUser= FirebaseDatabase.getInstance().getReference("Users");
 
-        // Reset errors.
+         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
@@ -159,8 +152,44 @@ public class LoginActivity extends AppCompatActivity  {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        FirebaseUser user = auth.getCurrentUser();
+                        String uid = user.getUid();
+                        dbrefUser.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String type = dataSnapshot.child("type").getValue().toString().trim();
+                                if(type.equals("Doctor")){
+                                    showProgress(false);
+                                    startActivity(new Intent(LoginActivity.this,DoctorActivity.class));
+                                    finish();
+                                }
+                                else if(type.equals("Patient")){
+                                    startActivity(new Intent(LoginActivity.this,PatientActivity.class));
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                        Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this,"Login Failed ! Wrong Credentials",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+
         }
     }
 
@@ -207,103 +236,6 @@ public class LoginActivity extends AppCompatActivity  {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        private FirebaseAuth auth = FirebaseAuth.getInstance();
-        private DatabaseReference dbrefUser= FirebaseDatabase.getInstance().getReference("Users");
-
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-
-                auth.signInWithEmailAndPassword(mEmail,mPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser user = auth.getCurrentUser();
-                            String uid = user.getUid();
-                            dbrefUser.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    String type = dataSnapshot.child("type").getValue().toString().trim();
-                                    if(type.equals("Doctor")){
-                                        startActivity(new Intent(LoginActivity.this,DoctorActivity.class));
-                                        finish();
-                                    }
-                                    else if(type.equals("Patient")){
-                                        startActivity(new Intent(LoginActivity.this,PatientActivity.class));
-                                        finish();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                            Toast.makeText(LoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(LoginActivity.this,"Login Failed ! Wrong Credentials",Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 }
