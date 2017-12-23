@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#47f9e8e8"
 
-    tools:context="com.android.hospitalapplication.RegistrationActivity">
+    tools:context="com.android.hospitalapplication.Activities.RegistrationActivity">
 
     <include
         android:id="@+id/register_app_bar_layout"
@@ -25,7 +25,7 @@
         android:text="Register As :"
         android:textSize="19sp" />
 
-    //Doc/Patient Button
+    <!--Doc/Patient Button-->
     <RadioGroup
         android:id="@+id/buttons"
         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:background="@drawable/rounded_corner_button"
             >
 
-            //Name
+           <!--Name-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -85,7 +85,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            //Email
+            <!--Email-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -102,7 +102,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            //Password
+            <!--Password-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -120,7 +120,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            //Confirm Pass
+            <!--Confirm Pass-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -139,7 +139,7 @@
             </android.support.design.widget.TextInputLayout>
 
 
-            //Gender
+            /<!--Gender-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
             </LinearLayout>
 
 
-            //patient specific details
+            <!--patient specific details-->
             <LinearLayout
                 android:id="@+id/patient_details"
                 android:layout_width="match_parent"
@@ -197,7 +197,7 @@
                 <Spinner
                     android:id="@+id/blood_group"
                     android:layout_width="wrap_content"
-                    android:background="@color/md_deep_orange_500"
+                    android:background="@color/md_red_400"
                     android:layout_height="match_parent"
                     android:spinnerMode="dropdown"
                     android:textAlignment="center"
@@ -206,7 +206,7 @@
                 </Spinner>
             </LinearLayout>
 
-            //Doctor Specific Details
+            <!--Doctor Specific Details-->
             <LinearLayout
                 android:id="@+id/doctor_details"
                 android:layout_width="match_parent"
@@ -232,7 +232,7 @@
                     <Spinner
                         android:id="@+id/doctor_speciality"
                         android:layout_width="wrap_content"
-                        android:background="@color/md_deep_orange_500"
+                        android:background="@color/md_red_400"
                         android:layout_height="match_parent"
                         android:textAlignment="center"
                         android:gravity="center"
@@ -254,12 +254,12 @@
 
             </LinearLayout>
 
-            //Contact
+            <!--Contacts-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/contact"
+                    android:id="@+id/phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Contact No."
@@ -270,7 +270,7 @@
                     android:textColorHint="@color/md_black_1000" />
             </android.support.design.widget.TextInputLayout>
 
-            //Address
+            <!--Address-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -292,7 +292,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/md_deep_orange_500"
+        android:background="@color/md_orange_400"
         android:text="Register"
         android:textColor="@color/md_white_1000"
         android:id="@+id/register_button"/>
